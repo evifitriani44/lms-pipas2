@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDIA PEMBELAJARAN PROJEK IPAS - SMKN 1 KALIPUCANG</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                            900: '#0c4a6e',
+                        },
+                        dpib: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309'
+                        },
+                        kuliner: {
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body { fontFamily: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Top Fixed Navigation -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur shadow-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & School Badge -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                        <i class="fa-solid font-bold text-lg fa-atom"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-slate-800 text-sm md:text-base leading-tight">Projek IPAS SMK</h1>
+                        <p class="text-xs text-brand-600 font-semibold">SMKN 1 Kalipucang • Fase E</p>
+                    </div>
+                </div>
+
+                <!-- Progress & Quick Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <div class="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full">
+                        <i class="fa-solid fa-trophy text-amber-500 text-xs"></i>
+                        <span class="text-xs font-medium text-slate-600">Progress Belajar:</span>
+                        <div class="w-24 bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div id="topProgressBar" class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <span id="topProgressText" class="text-xs font-bold text-brand-600">0%</span>
+                    </div>
+
+                    <button onclick="navigateTo('menu')" class="text-xs font-semibold px-3 py-2 text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition">
+                        <i class="fa-solid fa-grid-2 mr-1"></i> Menu Utama
+                    </button>
+                    <button onclick="navigateTo('refleksi')" class="text-xs font-semibold px-3 py-2 text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition">
+                        <i class="fa-solid fa-heart-pulse mr-1"></i> Refleksi
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex md:hidden items-center space-x-2">
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenuDrawer" class="hidden md:hidden bg-white border-b border-slate-200 px-4 py-3 space-y-2">
+            <button onclick="navigateTo('home')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-house w-6 text-brand-600"></i> Beranda
+            </button>
+            <button onclick="navigateTo('menu')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-list-check w-6 text-brand-600"></i> Menu Utama
+            </button>
+            <button onclick="navigateTo('materiA')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-flask w-6 text-cyan-600"></i> Zat & Perubahannya
+            </button>
+            <button onclick="navigateTo('materiB')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-bolt w-6 text-amber-500"></i> Energi & Perubahannya
+            </button>
+            <button onclick="navigateTo('dpib')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-compass-drafting w-6 text-dpib-600"></i> Eksplorasi DPIB
+            </button>
+            <button onclick="navigateTo('kuliner')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-utensils w-6 text-kuliner-600"></i> Eksplorasi Kuliner
+            </button>
+            <button onclick="navigateTo('evaluasi')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-clipboard-check w-6 text-purple-600"></i> Evaluasi Akhir
+            </button>
+            <button onclick="navigateTo('tantangan')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-award w-6 text-emerald-600"></i> Tantangan IPAS
+            </button>
+            <button onclick="navigateTo('refleksi')" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100">
+                <i class="fa-solid fa-pen-fancy w-6 text-rose-500"></i> Jurnal Refleksi
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main id="appContainer" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Dynamic Views Loaded via JS -->
+    </main>
+
+    <!-- Application Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+            <div>
+                <p class="font-semibold text-slate-700">MEDIA PEMBELAJARAN PROJEK IPAS</p>
+                <p>Zat dan Perubahannya serta Energi dan Perubahannya</p>
+            </div>
+            <div class="bg-slate-100 px-4 py-2 rounded-full font-medium text-slate-600 border border-slate-200">
+                <i class="fa-solid fa-graduation-cap text-brand-600 mr-1.5"></i> Dibuat oleh <span class="font-bold text-slate-800">Evi Fitriani</span> – SMKN 1 Kalipucang
+            </div>
+            <div class="flex space-x-4">
+                <span class="text-slate-400">Fase E / Kelas X SMK</span>
+                <span class="text-slate-300">|</span>
+                <span class="text-brand-600 font-semibold">DPIB & Kuliner</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State Management
+        const state = {
+            currentTab: 'home',
+            materiASubTab: 'a1',
+            materiBSubTab: 'b1',
+            progress: JSON.parse(localStorage.getItem('ipas_progress')) || {
+                readSections: [],
+                completedQuizzes: {},
+                challenges: [],
+                evaluationScore: null,
+                reflections: {}
+            }
+        };
+
+        function saveProgress() {
+            localStorage.setItem('ipas_progress', JSON.stringify(state.progress));
+            updateProgressUI();
+        }
+
+        function markSectionAsRead(sectionId) {
+            if (!state.progress.readSections.includes(sectionId)) {
+                state.progress.readSections.push(sectionId);
+                saveProgress();
+            }
+        }
+
+        function updateProgressUI() {
+            const totalModules = 35; // Total sections & features
+            const readCount = state.progress.readSections.length;
+            const percentage = Math.min(100, Math.round((readCount / totalModules) * 100));
+            
+            const bar = document.getElementById('topProgressBar');
+            const text = document.getElementById('topProgressText');
+            if (bar) bar.style.width = percentage + '%';
+            if (text) text.innerText = percentage + '%';
+        }
+
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function navigateTo(tab, subTab = null) {
+            state.currentTab = tab;
+            if (subTab) {
+                if (tab === 'materiA') state.materiASubTab = subTab;
+                if (tab === 'materiB') state.materiBSubTab = subTab;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderView();
+            document.getElementById('mobileMenuDrawer').classList.add('hidden');
+        }
+
+        // Render Controller
+        function renderView() {
+            const container = document.getElementById('appContainer');
+            container.innerHTML = ''; // Clear container
+
+            switch (state.currentTab) {
+                case 'home':
+                    renderHomeView(container);
+                    break;
+                case 'menu':
+                    renderMainMenuView(container);
+                    break;
+                case 'materiA':
+                    renderMateriAView(container);
+                    break;
+                case 'materiB':
+                    renderMateriBView(container);
+                    break;
+                case 'dpib':
+                    renderDPIBView(container);
+                    break;
+                case 'kuliner':
+                    renderKulinerView(container);
+                    break;
+                case 'kuis':
+                    renderKuisMenu(container);
+                    break;
+                case 'evaluasi':
+                    renderEvaluasiView(container);
+                    break;
+                case 'tantangan':
+                    renderTantanganView(container);
+                    break;
+                case 'refleksi':
+                    renderRefleksiView(container);
+                    break;
+                case 'selesai':
+                    renderSelesaiView(container);
+                    break;
+                default:
+                    renderHomeView(container);
+            }
+            updateProgressUI();
+        }
+    </script>
+
+    <script>
+        function renderHomeView(container) {
+            container.innerHTML = `
+            <div class="fade-in space-y-12">
+                <!-- Hero Section -->
+                <div class="relative bg-gradient-to-br from-slate-900 via-brand-900 to-slate-900 text-white rounded-3xl p-8 md:p-12 overflow-hidden shadow-2xl">
+                    <div class="absolute -right-10 -bottom-10 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute right-1/3 -top-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10 max-w-3xl space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur border border-white/20 px-3.5 py-1.5 rounded-full text-xs font-medium text-brand-100">
+                            <i class="fa-solid fa-school text-amber-400"></i>
+                            <span>SMKN 1 Kalipucang • Kelas X Fase E</span>
+                        </div>
+                        
+                        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                            MEDIA PEMBELAJARAN PROJEK IPAS
+                        </h1>
+                        <p class="text-lg md:text-xl font-medium text-brand-100">
+                            “Zat dan Perubahannya serta Energi dan Perubahannya”
+                        </p>
+                        <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                            Belajar IPAS melalui Fenomena Kehidupan Sehari-hari dan Rekayasa Dunia Kerja khusus siswa keahlian 
+                            <span class="text-amber-300 font-semibold">DPIB (Desain Pemodelan dan Informasi Bangunan)</span> & 
+                            <span class="text-emerald-300 font-semibold">Kuliner</span>.
+                        </p>
+
+                        <div class="pt-4 flex flex-wrap gap-4 items-center">
+                            <button onclick="navigateTo('menu')" class="bg-gradient-to-r from-brand-500 to-cyan-500 hover:from-brand-600 hover:to-cyan-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-brand-500/30 transition transform hover:-translate-y-0.5 flex items-center space-x-3 text-base">
+                                <span>Mulai Belajar Sekarang</span>
+                                <i class="fa-solid fa-circle-arrow-right"></i>
+                            </button>
+                            <button onclick="navigateTo('dpib')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-4 rounded-xl border border-white/20 transition flex items-center space-x-2 text-sm">
+                                <i class="fa-solid fa-compass-drafting text-amber-400"></i>
+                                <span>Lintas Jurusan DPIB</span>
+                            </button>
+                            <button onclick="navigateTo('kuliner')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-4 rounded-xl border border-white/20 transition flex items-center space-x-2 text-sm">
+                                <i class="fa-solid fa-utensils text-emerald-400"></i>
+                                <span>Lintas Jurusan Kuliner</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap justify-between items-center text-xs text-slate-300 gap-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-user-gear text-brand-400 text-base"></i>
+                            <span>Pengembang: <strong class="text-white">Evi Fitriani, S.Pd.</strong></span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-bullseye text-emerald-400 text-base"></i>
+                            <span>Prinsip: <strong>Pembelajaran Mendalam (Deep Learning)</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jurusan Special Feature Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- DPIB Card -->
+                    <div class="glass-card rounded-2xl p-6 hover:shadow-xl transition border-l-4 border-l-dpib-500 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-dpib-600 flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-helmet-safety text-2xl"></i>
+                            </div>
+                            <span class="text-xs font-bold text-dpib-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-wider">DPIB Context</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-2 mb-2">Desain Pemodelan & Informasi Bangunan</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Pelajari sains di balik material konstruksi (semen, beton, kayu, kaca, baja), korosi material, struktur partikel, hingga efisiensi energi pada bangunan hijau.
+                            </p>
+                        </div>
+                        <button onclick="navigateTo('dpib')" class="inline-flex items-center text-xs font-bold text-dpib-600 hover:text-dpib-700 space-x-2 group">
+                            <span>Jelajahi Penerapan DPIB</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </div>
+
+                    <!-- Kuliner Card -->
+                    <div class="glass-card rounded-2xl p-6 hover:shadow-xl transition border-l-4 border-l-kuliner-500 flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-kuliner-600 flex items-center justify-center mb-4">
+                                <i class="fa-solid fa-kitchen-set text-2xl"></i>
+                            </div>
+                            <span class="text-xs font-bold text-kuliner-600 bg-emerald-50 px-2.5 py-1 rounded-full uppercase tracking-wider">Kuliner Context</span>
+                            <h3 class="text-xl font-bold text-slate-800 mt-2 mb-2">Seni Kuliner & Tata Boga</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                                Pahami perubahan fisika & kimia pada pengolahan makanan, karamelisasi, reaksi Maillard, fermentasi, pengukuran presisi resep, dan perubahan energi peralatan dapur.
+                            </p>
+                        </div>
+                        <button onclick="navigateTo('kuliner')" class="inline-flex items-center text-xs font-bold text-kuliner-600 hover:text-kuliner-700 space-x-2 group">
+                            <span>Jelajahi Penerapan Kuliner</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives Highlight -->
+                <div class="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm">
+                    <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center space-x-3">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span>Target Pembelajaran Mendalam (Deep Learning)</span>
+                    </h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-bold mb-3">1</div>
+                            <h4 class="font-semibold text-slate-800 text-sm mb-1">Memahami Konsep</h4>
+                            <p class="text-xs text-slate-600">Menguasai sifat zat, klasifikasi materi, pengukuran, energi, dan hukum kekekalan.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold mb-3">2</div>
+                            <h4 class="font-semibold text-slate-800 text-sm mb-1">Menalar Kontekstual</h4>
+                            <p class="text-xs text-slate-600">Menghubungkan sains dengan fenomena dapur dan proyek gambar bangunan.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center font-bold mb-3">3</div>
+                            <h4 class="font-semibold text-slate-800 text-sm mb-1">Penyelidikan Ilmiah</h4>
+                            <p class="text-xs text-slate-600">Melatih membaca data, merancang eksperimen terbarukan, dan berpikir kritis.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold mb-3">4</div>
+                            <h4 class="font-semibold text-slate-800 text-sm mb-1">Refleksi Mandiri</h4>
+                            <p class="text-xs text-slate-600">Melakukan self-assessment serta membangun Profil Pelajar Pancasila.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+            markSectionAsRead('home');
+        }
+    </script>
+
+    <script>
+        function renderMainMenuView(container) {
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-full uppercase tracking-wider">Modul Navigasi Utama</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Pilih Modul Pembelajaran IPAS</h2>
+                    <p class="text-sm text-slate-600">Silakan pilih topik atau aktivitas yang ingin dipelajari sesuai tahapan projek kamu.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Menu A: Zat & Perubahannya -->
+                    <div onclick="navigateTo('materiA', 'a1')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-brand-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-flask-vial"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-brand-600 transition">A. Zat dan Perubahannya</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Wujud zat, partikel, klasifikasi unsur/senyawa/campuran, pemisahan campuran, pengukuran, perubahan fisika/kimia, dan B3.
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-brand-600">
+                            <span>Pelajari Modul A (9 Sub-materi)</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu B: Energi & Perubahannya -->
+                    <div onclick="navigateTo('materiB', 'b1')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-amber-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-bolt-lightning"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition">B. Energi dan Perubahannya</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Bentuk energi, transformasi energi, rumus usaha (W=F.s), energi fosil, energi terbarukan (surya, air, angin, bioenergi).
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-amber-600">
+                            <span>Pelajari Modul B (15 Sub-materi)</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu C: Eksplorasi DPIB -->
+                    <div onclick="navigateTo('dpib')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-dpib-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-dpib-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-compass-drafting"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-dpib-600 transition">C. Eksplorasi Khusus DPIB</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Sains material konstruksi, semen, beton, baja, kayu, reaksi korosi, dan efisiensi energi desain bangunan.
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-dpib-600">
+                            <span>Eksplorasi DPIB</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu D: Eksplorasi Kuliner -->
+                    <div onclick="navigateTo('kuliner')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-kuliner-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-kuliner-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-kuliner-600 transition">D. Eksplorasi Khusus Kuliner</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Sains bahan makanan, perpindahan panas memasak, karamelisasi, fermentasi adonan, dan konversi energi alat dapur.
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-kuliner-600">
+                            <span>Eksplorasi Kuliner</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu E: Kuis & Latihan Interaktif -->
+                    <div onclick="navigateTo('kuis')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-blue-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition">E. Kuis & Simulation Games</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Latihan formatif interaktif: Drag & Drop klasifikasi, detektif perubahan materi, dan tebak fenomena.
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-blue-600">
+                            <span>Mainkan Kuis</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu F: Evaluasi Akhir -->
+                    <div onclick="navigateTo('evaluasi')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-purple-500 group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-purple-600 transition">F. Evaluasi Sumatif</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                            Tes komprehensif (Pilihan Ganda, Benar/Salah, Menjodohkan, Studi Kasus) dengan skor otomatis & pembahasannya.
+                        </p>
+                        <div class="flex items-center text-xs font-bold text-purple-600">
+                            <span>Kerjakan Evaluasi</span>
+                            <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Menu G: Tantangan IPAS & Jurnal Refleksi -->
+                    <div onclick="navigateTo('tantangan')" class="glass-card rounded-2xl p-6 hover:shadow-xl transition cursor-pointer border border-slate-200 hover:border-emerald-500 group relative overflow-hidden md:col-span-2 lg:col-span-3 bg-gradient-to-r from-emerald-900 to-slate-900 text-white">
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                            <div class="space-y-2 text-center md:text-left">
+                                <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-500/30">Aktivitas Lapangan & Refleksi</span>
+                                <h3 class="text-xl font-bold">G. Tantangan IPAS & Jurnal Refleksi Diri</h3>
+                                <p class="text-xs text-slate-300 max-w-2xl">
+                                    Selesaikan 6 Tantangan Observasi Lapangan di sekolah/bengkel dan isi jurnal refleksi diri untuk mengukur pemahaman mendalam kamu.
+                                </p>
+                            </div>
+                            <div class="flex space-x-3 shrink-0">
+                                <button onclick="event.stopPropagation(); navigateTo('tantangan')" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-5 py-3 rounded-xl shadow-lg transition">
+                                    <i class="fa-solid fa-square-check mr-1"></i> Tantangan Checklist
+                                </button>
+                                <button onclick="event.stopPropagation(); navigateTo('refleksi')" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs px-5 py-3 rounded-xl border border-white/20 transition">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Isi Refleksi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+            markSectionAsRead('menu');
+        }
+    </script>
+
+    <script>
+        function renderMateriAView(container) {
+            const sub = state.materiASubTab;
+            markSectionAsRead('materiA_' + sub);
+
+            container.innerHTML = `
+            <div class="fade-in grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Sidebar Navigation Sub-materi A -->
+                <div class="lg:col-span-1 space-y-2">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm sticky top-20">
+                        <div class="flex items-center space-x-2 text-cyan-600 font-bold text-sm mb-4 pb-2 border-b border-slate-100">
+                            <i class="fa-solid fa-flask"></i>
+                            <span>MODUL A: ZAT</span>
+                        </div>
+                        <div class="space-y-1 text-xs">
+                            <button onclick="navigateTo('materiA', 'a1')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a1'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A1. Wujud & Partikel Zat</button>
+                            <button onclick="navigateTo('materiA', 'a2')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a2'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A2. Perubahan Wujud</button>
+                            <button onclick="navigateTo('materiA', 'a3')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a3'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A3. Klasifikasi Komposisi</button>
+                            <button onclick="navigateTo('materiA', 'a4')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a4'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A4. Komposisi DPIB & Kuliner</button>
+                            <button onclick="navigateTo('materiA', 'a5')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a5'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A5. Pemisahan Campuran</button>
+                            <button onclick="navigateTo('materiA', 'a6')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a6'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A6. Sifat Fisika & Kimia</button>
+                            <button onclick="navigateTo('materiA', 'a7')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a7'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A7. Pengukuran & Alat Ukur</button>
+                            <button onclick="navigateTo('materiA', 'a8')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a8'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A8. Perubahan Materi</button>
+                            <button onclick="navigateTo('materiA', 'a9')" class="w-full text-left p-2.5 rounded-lg transition font-medium ${sub==='a9'?'bg-cyan-50 text-cyan-700 font-bold border-l-4 border-cyan-600':'text-slate-600 hover:bg-slate-50'}">A9. Bahan Berbahaya (B3)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area for Sub-materi A -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div id="materiAContent" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <!-- Dynamic content injected here -->
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex justify-between items-center bg-slate-100 p-4 rounded-xl border border-slate-200">
+                        <button onclick="navigateTo('menu')" class="text-xs font-bold text-slate-600 hover:text-brand-600 flex items-center space-x-1">
+                            <i class="fa-solid fa-grid-2"></i>
+                            <span>Kembali ke Menu</span>
+                        </button>
+                        <div class="flex space-x-2">
+                            <button id="btnPrevA" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                <span>Sebelumnya</span>
+                            </button>
+                            <button id="btnNextA" class="bg-brand-600 text-white hover:bg-brand-700 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                                <span>Berikutnya</span>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            renderSubMateriAContent(sub);
+        }
+
+        // Sub-materi A Details Engine
+        function renderSubMateriAContent(sub) {
+            const container = document.getElementById('materiAContent');
+            const prevBtn = document.getElementById('btnPrevA');
+            const nextBtn = document.getElementById('btnNextA');
+
+            const order = ['a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9'];
+            const currentIndex = order.indexOf(sub);
+
+            prevBtn.onclick = () => {
+                if (currentIndex > 0) navigateTo('materiA', order[currentIndex - 1]);
+                else navigateTo('menu');
+            };
+            nextBtn.onclick = () => {
+                if (currentIndex < order.length - 1) navigateTo('materiA', order[currentIndex + 1]);
+                else navigateTo('materiB', 'b1');
+            };
+
+            if (sub === 'a1') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A1</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Wujud Zat & Structure Partikel</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <strong class="text-slate-800">Materi atau Zat</strong> adalah segala sesuatu yang memiliki massa dan menempati ruang (memiliki volume). Berdasarkan wujudnya, zat di alam dibagi menjadi tiga wujud utama: <strong>Padat, Cair, dan Gas</strong>.
+                    </p>
+
+                    <!-- Interactive Particle Canvas Simulation -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-inner space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                            <div>
+                                <h3 class="font-bold text-base text-cyan-400">Simulasi Partikel Zat Interaktif</h3>
+                                <p class="text-xs text-slate-300">Pilih wujud zat untuk melihat bagaimana partikel bergerak dan tersusun.</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="setParticleState('padat')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 hover:bg-cyan-600 text-white">Padat</button>
+                                <button onclick="setParticleState('cair')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-500 hover:bg-blue-600 text-white">Cair</button>
+                                <button onclick="setParticleState('gas')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 hover:bg-purple-600 text-white">Gas</button>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center">
+                            <canvas id="particleCanvas" width="500" height="220" class="w-full max-w-lg bg-slate-950 rounded-xl border border-slate-800"></canvas>
+                        </div>
+
+                        <div id="particleInfo" class="bg-slate-800/80 p-3 rounded-xl text-xs text-slate-200 border border-slate-700">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200">
+                                    <th class="p-3">Karakteristik</th>
+                                    <th class="p-3">Zat Padat</th>
+                                    <th class="p-3">Zat Cair</th>
+                                    <th class="p-3">Zat Gas</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-600">
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-800">Bentuk & Volume</td>
+                                    <td class="p-3">Bentuk & volume tetap</td>
+                                    <td class="p-3">Bentuk berubah mengikuti wadah, volume tetap</td>
+                                    <td class="p-3">Bentuk & volume berubah-ubah mengisi ruangan</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-800">Susunan Partikel</td>
+                                    <td class="p-3">Sangat rapat dan teratur</td>
+                                    <td class="p-3">Agak renggang, kurang teratur</td>
+                                    <td class="p-3">Sangat renggang dan tidak teratur</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-800">Gerak Partikel</td>
+                                    <td class="p-3">Hanya bergetar di tempatnya</td>
+                                    <td class="p-3">Bebas berpindah tetapi terbatas</td>
+                                    <td class="p-3">Bergerak sangat bebas dan cepat ke segala arah</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-800">Contoh Kontekstual</td>
+                                    <td class="p-3">Kayu, batu, semen, tepung terigu</td>
+                                    <td class="p-3">Air, minyak goreng, cat dinding</td>
+                                    <td class="p-3">Udara, uap air, gas LPG, oksigen</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Interactive Quick Micro-Check -->
+                    <div class="bg-cyan-50 border border-cyan-200 p-4 rounded-xl space-y-2">
+                        <h4 class="font-bold text-xs text-cyan-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-question"></i>
+                            <span>Uji Pemahaman Cepat</span>
+                        </h4>
+                        <p class="text-xs text-slate-700">Mengapa minyak goreng saat dituang ke dalam mangkuk bentuknya berubah menyerupai mangkuk, tetapi volumenya tidak bertambah?</p>
+                        <button onclick="alert('Penjelasan: Minyak adalah zat cair. Partikel zat cair dapat bergerak berpindah menyesuaikan bentuk wadahnya, namun gaya tarik antarpartikelnya masih cukup kuat sehingga jarak antarpartikel relative konstan (volumenya tetap).')" class="text-xs font-bold text-cyan-600 underline">Lihat Jawaban Scientific</button>
+                    </div>
+                </div>
+                `;
+                initParticleCanvas();
+            } else if (sub === 'a2') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A2</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Perubahan Wujud Zat</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Perubahan wujud terjadi ketika suatu zat menyerap (menerima) atau melepaskan energi panas (kalor).
+                    </p>
+
+                    <!-- Interactive State Diagram -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-amber-500"><i class="fa-solid fa-fire-burner"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Mencair / Meleleh</h4>
+                            <p class="text-xs text-slate-500">Padat → Cair (Menyerap Kalor)</p>
+                            <span class="text-[11px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium inline-block">Es batu meleleh, Mentega dipanaskan</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-blue-500"><i class="fa-solid fa-snowflake"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Membeku</h4>
+                            <p class="text-xs text-slate-500">Cair → Padat (Melepas Kalor)</p>
+                            <span class="text-[11px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full font-medium inline-block">Air dimasukkan freezer, Lilin cair mendingin</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-rose-500"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Menguap</h4>
+                            <p class="text-xs text-slate-500">Cair → Gas (Menyerap Kalor)</p>
+                            <span class="text-[11px] bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full font-medium inline-block">Mendidihkan air kuah, Pengeringan cat</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-teal-500"><i class="fa-solid fa-droplet"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Mengembun</h4>
+                            <p class="text-xs text-slate-500">Gas → Cair (Melepas Kalor)</p>
+                            <span class="text-[11px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-medium inline-block">Titik air luar gelas es, Embun pagi</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-purple-500"><i class="fa-solid fa-wind"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Menyublim</h4>
+                            <p class="text-xs text-slate-500">Padat → Gas (Menyerap Kalor)</p>
+                            <span class="text-[11px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-medium inline-block">Kapur barus/kamfer di lemari</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2 hover:border-cyan-500 transition">
+                            <div class="text-2xl text-indigo-500"><i class="fa-solid fa-cubes-stacked"></i></div>
+                            <h4 class="font-bold text-sm text-slate-800">Mengkristal / Deposisi</h4>
+                            <p class="text-xs text-slate-500">Gas → Padat (Melepas Kalor)</p>
+                            <span class="text-[11px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-medium inline-block">Pembentukan salju, Knalpot jelaga</span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Prediction Quiz -->
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-sm text-cyan-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Aktivitas Prediksi Fenomena Suhu</span>
+                        </h3>
+                        <p class="text-xs text-slate-300">
+                            Jika seorang chef menyalakan oven pada suhu 180°C dan memasukkan adonan kukis mentah, lalu pintu oven ditutup... Perubahan wujud apa saja yang dapat terprediksi secara bersamaan pada bahan mentega & kadar air adonan?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button onclick="checkPrediction(1)" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 text-left text-xs">
+                                <strong>A.</strong> Mentega mencair (padat ke cair) dan kadar air menguap (cair ke gas).
+                            </button>
+                            <button onclick="checkPrediction(2)" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 text-left text-xs">
+                                <strong>B.</strong> Mentega membeku dan air membeku.
+                            </button>
+                        </div>
+                        <div id="predictionFeedback" class="hidden text-xs p-3 rounded-lg font-medium"></div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a3') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A3</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Klasifikasi Materi Berdasarkan Komposisi</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Materi dikelompokkan menjadi <strong>Zat Tunggal (Murni)</strong> dan <strong>Campuran</strong>.
+                    </p>
+
+                    <!-- Concept Map -->
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <div class="text-center font-bold text-slate-800 mb-4 text-sm">Peta Konsep Klasifikasi Materi</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="bg-white p-4 rounded-xl border border-cyan-200 space-y-2">
+                                <span class="bg-cyan-100 text-cyan-800 text-xs font-bold px-2 py-0.5 rounded">ZAT TUNGGAL</span>
+                                <p class="text-xs text-slate-600">Hanya terdiri dari satu jenis materi sederhana.</p>
+                                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                    <li><strong>Unsur:</strong> Zat murni terkecil (Besi/Fe, Aluminium/Al, Oksigen/O₂).</li>
+                                    <li><strong>Senyawa:</strong> Gabungan 2/lebih unsur secara kimia (Air/H₂O, Garam/NaCl, Gula/C₁₂H₂₂O₁₁).</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-amber-200 space-y-2">
+                                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded">CAMPURAN</span>
+                                <p class="text-xs text-slate-600">Gabungan 2/lebih zat tanpa reaksi kimia.</p>
+                                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                    <li><strong>Homogen (Larutan):</strong> Serba sama, batas antarzat tak terlihat (Air sirup, air garam, kuningan).</li>
+                                    <li><strong>Heterogen:</strong> Serba aneka, batas antarzat masih terlihat (Air + minyak, beton basah, air + pasir).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini Drag & Classify Game -->
+                    <div class="bg-white border-2 border-dashed border-cyan-300 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-sm text-cyan-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-puzzle-piece"></i>
+                            <span>Mini Game: Kelompokkan Zat Berikuk ini!</span>
+                        </h3>
+                        <p class="text-xs text-slate-600">Klik item lalu klik kategori yang benar:</p>
+                        
+                        <div id="classifyItems" class="flex flex-wrap gap-2">
+                            <button onclick="selectClassifyItem(this, 'Senyawa')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs px-3 py-1.5 rounded-lg border font-medium">Garam Dapur (NaCl)</button>
+                            <button onclick="selectClassifyItem(this, 'Unsur')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs px-3 py-1.5 rounded-lg border font-medium">Tembaga (Cu)</button>
+                            <button onclick="selectClassifyItem(this, 'Homogen')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs px-3 py-1.5 rounded-lg border font-medium">Sirup Melon</button>
+                            <button onclick="selectClassifyItem(this, 'Heterogen')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs px-3 py-1.5 rounded-lg border font-medium">Campuran Semen + Pasir</button>
+                        </div>
+
+                        <div id="classifyFeedback" class="text-xs font-bold text-emerald-600 hidden"></div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a4') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A4</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Klasifikasi Materi dalam Dunia Kerja SMK</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- DPIB Card -->
+                        <div class="bg-amber-50 border border-amber-200 p-6 rounded-2xl space-y-4">
+                            <div class="flex items-center space-x-3 text-dpib-600">
+                                <i class="fa-solid fa-building-columns text-2xl"></i>
+                                <h3 class="font-bold text-base text-slate-800">Sains Material DPIB</h3>
+                            </div>
+                            <ul class="text-xs text-slate-700 space-y-2">
+                                <li class="p-2 bg-white rounded-lg border border-amber-100">
+                                    <strong class="text-dpib-600">Aluminium (Al) & Tembaga (Cu):</strong> Unsur logam yang dipakai pada kosen & kabel instalasi listrik bangunan.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-amber-100">
+                                    <strong class="text-dpib-600">Kaca Kalsium Silikat:</strong> Senyawa anorganik untuk jendela dengan transparansi tinggi.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-amber-100">
+                                    <strong class="text-dpib-600">Beton (Semen + Pasir + Kerikil + Air):</strong> Campuran Heterogen yang mengeras menjadi matrik kokoh penopang struktur gedung.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-amber-100">
+                                    <strong class="text-dpib-600">Cat Emulsi Dinding:</strong> Campuran koloid/heterogen antara pigmen warna, perekat, dan pelarut.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Kuliner Card -->
+                        <div class="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl space-y-4">
+                            <div class="flex items-center space-x-3 text-kuliner-600">
+                                <i class="fa-solid fa-kitchen-set text-2xl"></i>
+                                <h3 class="font-bold text-base text-slate-800">Sains Bahan Kuliner</h3>
+                            </div>
+                            <ul class="text-xs text-slate-700 space-y-2">
+                                <li class="p-2 bg-white rounded-lg border border-emerald-100">
+                                    <strong class="text-kuliner-600">Air Murni (H₂O) & Gula (C₁₂H₂₂O₁₁):</strong> Senyawa penting dalam resep minuman & adonan kue.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-emerald-100">
+                                    <strong class="text-kuliner-600">Larutan Gula / Sirup:</strong> Campuran Homogen di mana molekul gula terdistribusi merata sempurna dalam air.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-emerald-100">
+                                    <strong class="text-kuliner-600">Susu Segar & Mayones:</strong> Campuran koloid heterogen (emulsi) antara lemak dan air.
+                                </li>
+                                <li class="p-2 bg-white rounded-lg border border-emerald-100">
+                                    <strong class="text-kuliner-600">Adonan Es Cendol / Sup Sayur:</strong> Campuran Heterogen dengan komponen yang terlihat jelas secara kasat mata.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a5') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A5</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Metode Pemisahan Campuran</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Campuran dapat dipisahkan secara fisika berdasarkan perbedaan sifat zat penyusunnya seperti ukuran partikel, titik didih, atau sifat kemagnetan.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                            <div class="text-brand-600 font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-filter"></i>
+                                <span>1. Filtrasi (Penyaringan)</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Memisahkan zat padat dari cairan berdasarkan perbedaan ukuran partikel menggunakan penyaring (filter).</p>
+                            <span class="text-[11px] font-semibold text-slate-700 bg-white px-2 py-1 rounded border block">Contoh: Memisahkan ampas kopi / menyaring air keruh di bengkel.</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                            <div class="text-brand-600 font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-temperature-arrow-up"></i>
+                                <span>2. Evaporasi (Penguapan)</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Memisahkan zat padat terlarut dari pelarutnya dengan cara memanaskan hingga pelarut menguap.</p>
+                            <span class="text-[11px] font-semibold text-slate-700 bg-white px-2 py-1 rounded border block">Contoh: Pembuatan garam dapur dari air laut.</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                            <div class="text-brand-600 font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-vial-virus"></i>
+                                <span>3. Distilasi (Penyulingan)</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Memisahkan campuran zat cair berdasarkan perbedaan titik didih komponennya.</p>
+                            <span class="text-[11px] font-semibold text-slate-700 bg-white px-2 py-1 rounded border block">Contoh: Memisahkan alkohol dan air / pemurnian minyak bumi.</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                            <div class="text-brand-600 font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-magnet"></i>
+                                <span>4. Pemisahan Magnetik</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Memisahkan bahan feromagnetik (seperti besi) dari bahan non-magnetik menggunakan magnet.</p>
+                            <span class="text-[11px] font-semibold text-slate-700 bg-white px-2 py-1 rounded border block">Contoh: Memisahkan serbuk besi dari pasir proyek DPIB.</span>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                            <div class="text-brand-600 font-bold text-sm flex items-center space-x-2">
+                                <i class="fa-solid fa-glass-water"></i>
+                                <span>5. Dekantasi</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Memisahkan cairan dari endapan padat secara perlahan tanpa kertas saring.</p>
+                            <span class="text-[11px] font-semibold text-slate-700 bg-white px-2 py-1 rounded border block">Contoh: Memisahkan air dari beras sebelum dimasak.</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a6') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A6</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Sifat Fisika vs Sifat Kimia</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-5 bg-blue-50 border border-blue-200 rounded-2xl space-y-3">
+                            <h3 class="font-bold text-base text-blue-800"><i class="fa-solid fa-eye mr-2"></i>Sifat Fisika</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Sifat yang dapat diamati atau diukur tanpa mengubah identitas zat atau menghasilkan zat baru.
+                            </p>
+                            <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                <li>Warna, bau, dan rasa</li>
+                                <li>Titik leleh & titik didih</li>
+                                <li>Massa jenis (densitas)</li>
+                                <li>Keras/lunaknya material</li>
+                                <li>Daya hantar listrik & panas</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-5 bg-rose-50 border border-rose-200 rounded-2xl space-y-3">
+                            <h3 class="font-bold text-base text-rose-800"><i class="fa-solid fa-flask-gear mr-2"></i>Sifat Kimia</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Kemampuan suatu zat untuk bereaksi atau mengalami perubahan membentuk zat baru dengan sifat berbeda.
+                            </p>
+                            <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                <li>Mudah terbakar (combustibility)</li>
+                                <li>Mudah berkarat / korosif</li>
+                                <li>Tingkat keasaman (pH)</li>
+                                <li>Mudah membusuk / terfermentasi</li>
+                                <li>Keterancaman beracun (toksisitas)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a7') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A7</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Pengukuran, Satuan SI & Alat Ukur Presisi</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Dalam pekerjaan DPIB dan Kuliner, presisi pengukuran sangat menentukan kualitas produk gedung maupun cita rasa hidangan!
+                    </p>
+
+                    <!-- Interactive Measurement Tool Tooltip Showcase -->
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-sm text-amber-400"><i class="fa-solid fa-ruler-combined mr-2"></i>Simulasi Interaktif: Membaca Jangka Sorong (Vernier Caliper)</h3>
+                        <p class="text-xs text-slate-300">Geser slider untuk mensimulasikan pengukuran ketebalan pipa aluminium DPIB:</p>
+
+                        <div class="space-y-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                            <div class="flex justify-between text-xs font-mono">
+                                <span>Skala Utama + Nonius:</span>
+                                <span id="caliperValue" class="text-amber-400 font-bold text-base">12.4 mm</span>
+                            </div>
+                            <input type="range" min="0" max="50" step="0.1" value="12.4" oninput="updateCaliperSim(this.value)" class="w-full accent-amber-500 cursor-pointer">
+                            <div class="text-[11px] text-slate-400">Ketelitian Jangka Sorong: <strong>0.1 mm (0.01 cm)</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1 text-xs">
+                            <strong class="text-slate-800 block text-sm">Neraca Digital / Analitik</strong>
+                            <p class="text-slate-600">Mengukur massa bahan kue (gram) atau zat kimia dengan ketepatan tinggi.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1 text-xs">
+                            <strong class="text-slate-800 block text-sm">Mikrometer Sekrup</strong>
+                            <p class="text-slate-600">Mengukur ketebalan plat besi/baja DPIB hingga ketelitian 0.01 mm.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1 text-xs">
+                            <strong class="text-slate-800 block text-sm">Gelas Ukur / Thermometer</strong>
+                            <p class="text-slate-600">Mengukur volume zat cair (mL) dan suhu pemasakan masakan (°C).</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a8') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A8</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Detektif Perubahan Materi (Fisika, Kimia, Biologi)</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Perubahan materi dibagi menjadi tiga kategori utama:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2 text-xs">
+                            <h4 class="font-bold text-sm text-emerald-800">1. Perubahan Fisika</h4>
+                            <p class="text-slate-600">Tidak menghasilkan zat baru. Sifat kimia materi tidak berubah, hanya bentuk/wujudnya saja.</p>
+                            <span class="font-bold text-emerald-700 block">Contoh: Kertas dipotong, es mencair, air menguap.</span>
+                        </div>
+
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs">
+                            <h4 class="font-bold text-sm text-amber-800">2. Perubahan Kimia</h4>
+                            <p class="text-slate-600">Menghasilkan zat baru melalui reaksi kimia. Diikuti perubahan warna, pembentukan gas, atau endapan.</p>
+                            <span class="font-bold text-amber-700 block">Contoh: Kayu terbakar jadi abu, besi berkarat, memasak telur.</span>
+                        </div>
+
+                        <div class="p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-2 text-xs">
+                            <h4 class="font-bold text-sm text-purple-800">3. Perubahan Biologi</h4>
+                            <p class="text-slate-600">Perubahan yang disebabkan oleh aktivitas organisme hidup (bakteri, jamur, enzim).</p>
+                            <span class="font-bold text-purple-700 block">Contoh: Pembusukan buah, fermentasi ragi pada adonan roti.</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'a9') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-cyan-600 bg-cyan-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul A9</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Bahan Berbahaya dan Beracun (B3) & K3LH</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Pengenalan simbol bahaya B3 wajib dikuasai oleh siswa SMK agar selamat saat bekerja di laboratorium, bengkel DPIB, maupun dapur Kuliner!
+                    </p>
+
+                    <!-- B3 Hazard Symbols Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="p-4 bg-red-50 border border-red-200 rounded-xl text-center space-y-2">
+                            <div class="text-3xl text-red-600"><i class="fa-solid fa-fire"></i></div>
+                            <h4 class="font-bold text-xs text-slate-800">Mudah Terbakar</h4>
+                            <p class="text-[11px] text-slate-500">Toluena, Gas LPG, Alkohol, Thinner Cat</p>
+                        </div>
+
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-center space-y-2">
+                            <div class="text-3xl text-amber-600"><i class="fa-solid fa-vial-circle-check"></i></div>
+                            <h4 class="font-bold text-xs text-slate-800">Korosif</h4>
+                            <p class="text-[11px] text-slate-500">Asam Sulfat, Pembersih Keramik HCL</p>
+                        </div>
+
+                        <div class="p-4 bg-purple-50 border border-purple-200 rounded-xl text-center space-y-2">
+                            <div class="text-3xl text-purple-600"><i class="fa-solid fa-skull-crossbones"></i></div>
+                            <h4 class="font-bold text-xs text-slate-800">Beracun (Toxic)</h4>
+                            <p class="text-[11px] text-slate-500">Pestisida, Pemutih Pakaian Konsentrat</p>
+                        </div>
+
+                        <div class="p-4 bg-orange-50 border border-orange-200 rounded-xl text-center space-y-2">
+                            <div class="text-3xl text-orange-600"><i class="fa-solid fa-burst"></i></div>
+                            <h4 class="font-bold text-xs text-slate-800">Mudah Meledak</h4>
+                            <p class="text-[11px] text-slate-500">Tabung Gas Tekanan Tinggi, Amonium Nitrat</p>
+                        </div>
+                    </div>
+
+                    <!-- Case Study Box -->
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-3">
+                        <h4 class="font-bold text-xs text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-shield-halved mr-2"></i>Studi Kasus Keselamatan Kerja (K3)</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Di sebuah bengkel DPIB, siswa akan menggunakan thinner cair untuk membersihkan sisa cat epoksi. Di sebelah tempat kerja terdapat rekan lain yang sedang melakukan pemotongan gerinda baja berkilat api. Tindakan K3 apa yang paling tepat?
+                        </p>
+                        <div class="text-xs bg-slate-800 p-3 rounded-xl text-slate-200 border border-slate-700">
+                            <strong>Jawaban Tepat:</strong> Thinner bersifat mudah terbakar. Penggunaan thinner harus dilakukan jauh dari sumber percikan api (gerinda) di ruangan bertukar udara lancar (ventilasi terbuka) serta menggunakan APD masker respirator dan sarung tangan tahan bahan kimia!
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+        }
+
+        // Helpers for Sub-materi A
+        let particleCanvasAnimId = null;
+        let particleState = 'padat';
+
+        function setParticleState(st) {
+            particleState = st;
+            const info = document.getElementById('particleInfo');
+            if (st === 'padat') {
+                info.innerHTML = '<strong>Zat Padat:</strong> Partikel terikat sangat kuat, tidak dapat bebas berpindah tempat. Jarak antarpartikel rapat & tersusun teratur.';
+            } else if (st === 'cair') {
+                info.innerHTML = '<strong>Zat Cair:</strong> Partikel dapat meluncur dan berpindah tempat secara bebas terbatas, namun tetap dalam kelompoknya. Jarak antarpartikel relatif agak renggang.';
+            } else if (st === 'gas') {
+                info.innerHTML = '<strong>Zat Gas:</strong> Partikel bergerak sangat cepat ke segala arah dengan frekuensi tumbukan tinggi. Jarak antarpartikel sangat jauh.';
+            }
+        }
+
+        function initParticleCanvas() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            setParticleState('padat');
+
+            let particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: 7
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (particleState === 'padat') {
+                    let cols = 8, rows = 5;
+                    let startX = (canvas.width - cols * 25) / 2;
+                    let startY = (canvas.height - rows * 25) / 2;
+                    let idx = 0;
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            if (idx < particles.length) {
+                                let px = startX + c * 25 + (Math.random() - 0.5) * 1.5;
+                                let py = startY + r * 25 + (Math.random() - 0.5) * 1.5;
+                                ctx.beginPath();
+                                ctx.arc(px, py, 7, 0, Math.PI * 2);
+                                ctx.fillStyle = '#06b6d4';
+                                ctx.fill();
+                                ctx.strokeStyle = '#0891b2';
+                                ctx.stroke();
+                                idx++;
+                            }
+                        }
+                    }
+                } else if (particleState === 'cair') {
+                    particles.forEach(p => {
+                        p.x += p.vx * 0.8;
+                        p.y += p.vy * 0.8;
+
+                        if (p.x < 20 || p.x > canvas.width - 20) p.vx *= -1;
+                        if (p.y < canvas.height - 80 || p.y > canvas.height - 20) p.vy *= -1;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 7, 0, Math.PI * 2);
+                        ctx.fillStyle = '#3b82f6';
+                        ctx.fill();
+                    });
+                } else if (particleState === 'gas') {
+                    particles.forEach(p => {
+                        p.x += p.vx * 3;
+                        p.y += p.vy * 3;
+
+                        if (p.x < 10 || p.x > canvas.width - 10) p.vx *= -1;
+                        if (p.y < 10 || p.y > canvas.height - 10) p.vy *= -1;
+
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, 7, 0, Math.PI * 2);
+                        ctx.fillStyle = '#a855f7';
+                        ctx.fill();
+                    });
+                }
+
+                particleCanvasAnimId = requestAnimationFrame(animate);
+            }
+            cancelAnimationFrame(particleCanvasAnimId);
+            animate();
+        }
+
+        function checkPrediction(opt) {
+            const feedback = document.getElementById('predictionFeedback');
+            feedback.classList.remove('hidden');
+            if (opt === 1) {
+                feedback.className = 'text-xs p-3 rounded-lg font-medium bg-emerald-900/90 text-emerald-200 border border-emerald-700';
+                feedback.innerHTML = '<strong>Tepat Sekali!</strong> Suhu tinggi oven menyebabkan mentega menyerap kalor sehingga mencair (padat -> cair), sekaligus air adonan menyerap kalor sehingga menguap (cair -> gas).';
+            } else {
+                feedback.className = 'text-xs p-3 rounded-lg font-medium bg-rose-900/90 text-rose-200 border border-rose-700';
+                feedback.innerHTML = '<strong>Kurang Tepat.</strong> Pemansan oven menambah kalor, bukan mendinginkan!';
+            }
+        }
+
+        function updateCaliperSim(val) {
+            document.getElementById('caliperValue').innerText = val + ' mm';
+        }
+
+        function selectClassifyItem(btn, category) {
+            const fb = document.getElementById('classifyFeedback');
+            fb.classList.remove('hidden');
+            fb.innerText = `Jawaban Benar! "${btn.innerText}" diklasifikasikan sebagai: ${category}.`;
+            btn.classList.add('opacity-50', 'line-through');
+            btn.disabled = true;
+        }
+    </script>
+
+    <script>
+        function renderMateriBView(container) {
+            const sub = state.materiBSubTab;
+            markSectionAsRead('materiB_' + sub);
+
+            container.innerHTML = `
+            <div class="fade-in grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Sidebar Sub-materi B -->
+                <div class="lg:col-span-1 space-y-2">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm sticky top-20 max-h-[80vh] overflow-y-auto">
+                        <div class="flex items-center space-x-2 text-amber-600 font-bold text-sm mb-4 pb-2 border-b border-slate-100">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>MODUL B: ENERGI</span>
+                        </div>
+                        <div class="space-y-1 text-xs">
+                            <button onclick="navigateTo('materiB', 'b1')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b1'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B1. Pengertian & Bentuk Energi</button>
+                            <button onclick="navigateTo('materiB', 'b2')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b2'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B2. Perubahan Bentuk Energi</button>
+                            <button onclick="navigateTo('materiB', 'b3')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b3'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B3. Usaha (W = F × s)</button>
+                            <button onclick="navigateTo('materiB', 'b4')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b4'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B4. Usaha & Perubahan Energi</button>
+                            <button onclick="navigateTo('materiB', 'b5')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b5'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B5. Energi Tidak Terbarukan</button>
+                            <button onclick="navigateTo('materiB', 'b6')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b6'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B6. Penyelidikan Data Fosil</button>
+                            <button onclick="navigateTo('materiB', 'b7')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b7'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B7. Energi Matahari & Air</button>
+                            <button onclick="navigateTo('materiB', 'b8')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b8'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B8. Design Percobaan Surya</button>
+                            <button onclick="navigateTo('materiB', 'b9')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b9'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B9. Energi Angin & Bioenergi</button>
+                            <button onclick="navigateTo('materiB', 'b10')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b10'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B10. Eksperimen Terbarukan</button>
+                            <button onclick="navigateTo('materiB', 'b11')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b11'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B11. Energi Mekanik (Ep & Ek)</button>
+                            <button onclick="navigateTo('materiB', 'b12')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b12'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B12. Energi Kimia & Listrik</button>
+                            <button onclick="navigateTo('materiB', 'b13')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b13'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B13. Analisis Data Energi</button>
+                            <button onclick="navigateTo('materiB', 'b14')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b14'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B14. Buktikan dengan Data!</button>
+                            <button onclick="navigateTo('materiB', 'b15')" class="w-full text-left p-2 rounded-lg transition font-medium ${sub==='b15'?'bg-amber-50 text-amber-700 font-bold border-l-4 border-amber-600':'text-slate-600 hover:bg-slate-50'}">B15. Refleksi Energi</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area for Sub-materi B -->
+                <div class="lg:col-span-3 space-y-6">
+                    <div id="materiBContent" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                        <!-- Content Injected by JS -->
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex justify-between items-center bg-slate-100 p-4 rounded-xl border border-slate-200">
+                        <button onclick="navigateTo('menu')" class="text-xs font-bold text-slate-600 hover:text-brand-600 flex items-center space-x-1">
+                            <i class="fa-solid fa-grid-2"></i>
+                            <span>Kembali ke Menu</span>
+                        </button>
+                        <div class="flex space-x-2">
+                            <button id="btnPrevB" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                                <i class="fa-solid fa-chevron-left"></i>
+                                <span>Sebelumnya</span>
+                            </button>
+                            <button id="btnNextB" class="bg-amber-600 text-white hover:bg-amber-700 font-bold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-1">
+                                <span>Berikutnya</span>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            renderSubMateriBContent(sub);
+        }
+
+        function renderSubMateriBContent(sub) {
+            const container = document.getElementById('materiBContent');
+            const prevBtn = document.getElementById('btnPrevB');
+            const nextBtn = document.getElementById('btnNextB');
+
+            const order = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8', 'b9', 'b10', 'b11', 'b12', 'b13', 'b14', 'b15'];
+            const currentIndex = order.indexOf(sub);
+
+            prevBtn.onclick = () => {
+                if (currentIndex > 0) navigateTo('materiB', order[currentIndex - 1]);
+                else navigateTo('materiA', 'a9');
+            };
+            nextBtn.onclick = () => {
+                if (currentIndex < order.length - 1) navigateTo('materiB', order[currentIndex + 1]);
+                else navigateTo('dpib');
+            };
+
+            if (sub === 'b1') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul B1</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Pengertian Energi & Hukum Kekekalan Energi</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        <strong>Energi</strong> didefinisikan sebagai kemampuan untuk melakukan usaha atau kerja. Menurut <strong>Hukum Kekekalan Energi</strong>: <em>"Energi tidak dapat diciptakan maupun dimusnahkan, melainkan hanya dapat diubah dari satu bentuk energi ke bentuk energi lainnya."</em>
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-temperature-three-quarters mr-1"></i> Kalor (Panas)</span>
+                            <p class="text-xs text-slate-600">Energi berpindah akibat perbedaan suhu.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-plug mr-1"></i> Energi Listrik</span>
+                            <p class="text-xs text-slate-600">Diakibatkan oleh muatan arus elektron.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-flask mr-1"></i> Energi Kimia</span>
+                            <p class="text-xs text-slate-600">Tersimpan dalam ikatan molekul bahan baku/makanan.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-gear mr-1"></i> Energi Kinetik</span>
+                            <p class="text-xs text-slate-600">Milik benda yang sedang bergerak.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-mountain mr-1"></i> Energi Potensial</span>
+                            <p class="text-xs text-slate-600">Milik benda karena posisi atau ketinggiannya.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+                            <span class="text-amber-500 font-bold text-base"><i class="fa-solid fa-sun mr-1"></i> Energi Cahaya</span>
+                            <p class="text-xs text-slate-600">Gelombang elektromagnetik yang terpancar.</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'b2') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul B2</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Diagram Transformasi Bentuk Energi</h2>
+                    </div>
+
+                    <!-- Interactive Diagram flow -->
+                    <div class="space-y-4">
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-2">
+                            <div class="flex items-center space-x-2 font-bold text-xs text-amber-900">
+                                <i class="fa-solid fa-blender text-lg text-amber-600"></i>
+                                <span>Blender Dapur / Hand Mixer</span>
+                            </div>
+                            <div class="text-xs font-semibold bg-white px-3 py-1.5 rounded-lg border border-amber-200">
+                                Energi Listrik → Energi Gerak (Kinetik) + Bunyi
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-2">
+                            <div class="flex items-center space-x-2 font-bold text-xs text-amber-900">
+                                <i class="fa-solid fa-dumpster-fire text-lg text-amber-600"></i>
+                                <span>Kompor Gas LPG / Biomassa</span>
+                            </div>
+                            <div class="text-xs font-semibold bg-white px-3 py-1.5 rounded-lg border border-amber-200">
+                                Energi Kimia → Energi Kalor (Panas) + Cahaya
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-2">
+                            <div class="flex items-center space-x-2 font-bold text-xs text-amber-900">
+                                <i class="fa-solid fa-solar-panel text-lg text-amber-600"></i>
+                                <span>Panel Surya (Photovoltaic) Gedung DPIB</span>
+                            </div>
+                            <div class="text-xs font-semibold bg-white px-3 py-1.5 rounded-lg border border-amber-200">
+                                Energi Cahaya Matahari → Energi Listrik
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'b3') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul B3</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Konsep Usaha Fisika (W = F × s)</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Dalam fisika, <strong>Usaha (W)</strong> terjadi apabila gaya (F) yang diberikan pada benda berhasil menghasilkan perpindahan (s) searah gaya tersebut.
+                    </p>
+
+                    <div class="bg-slate-900 text-white p-6 rounded-2xl text-center space-y-3">
+                        <div class="text-xl font-mono font-bold text-amber-400">W = F × s</div>
+                        <p class="text-xs text-slate-300">
+                            W = Usaha (Joule/J)<br>
+                            F = Gaya (Newton/N)<br>
+                            s = Perpindahan (Meter/m)
+                        </p>
+                    </div>
+
+                    <!-- Interactive Calculator Widget -->
+                    <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl space-y-4">
+                        <h3 class="font-bold text-xs text-slate-800 uppercase tracking-wider"><i class="fa-solid fa-calculator text-amber-600 mr-2"></i>Kalkulator Usaha Fisika Interaktif</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs text-slate-600 block mb-1">Gaya Dorong F (Newton):</label>
+                                <input id="calcF" type="number" value="150" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-xs">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-600 block mb-1">Perpindahan Benda s (Meter):</label>
+                                <input id="calcS" type="number" value="10" class="w-full p-2.5 bg-white border border-slate-300 rounded-lg text-xs">
+                            </div>
+                        </div>
+                        <button onclick="calculateWork()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs py-2.5 rounded-lg transition">Hitung Usaha (W)</button>
+                        <div id="calcResult" class="text-xs font-bold text-emerald-700 hidden p-3 bg-emerald-50 rounded-lg border border-emerald-200"></div>
+                    </div>
+                </div>
+                `;
+            } else if (sub === 'b5' || sub === 'b6') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul B5 & B6</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Energi Tidak Terbarukan & Penyelidikan Data Fosil</h2>
+                    </div>
+
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Bahan bakar fosil (minyak bumi, batubara, gas alam) terbentuk dari pelapukan fosil jutaan tahun lalu dan ketersediaannya di bumi terbatas!
+                    </p>
+
+                    <!-- Chart JS Example -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-4">
+                        <h3 class="font-bold text-xs text-slate-800">Grafik Konsumsi Energi Fosil vs Dampak Emisi CO₂</h3>
+                        <div class="h-64">
+                            <canvas id="fossilChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                `;
+                setTimeout(initFossilChart, 100);
+            } else if (sub === 'b7' || sub === 'b8' || sub === 'b9' || sub === 'b10') {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul B7-B10</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Energi Terbarukan (Matahari, Air, Angin, Bioenergi)</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-5 bg-amber-50 border border-amber-200 rounded-2xl space-y-2">
+                            <h3 class="font-bold text-sm text-amber-800"><i class="fa-solid fa-sun mr-2"></i>Energi Surya (Matahari)</h3>
+                            <p class="text-xs text-slate-600">Memanfaatkan foton cahaya matahari dengan sel fotovoltaik menghasilkan listrik ramah lingkungan tanpa emisi.</p>
+                        </div>
+                        <div class="p-5 bg-blue-50 border border-blue-200 rounded-2xl space-y-2">
+                            <h3 class="font-bold text-sm text-blue-800"><i class="fa-solid fa-water mr-2"></i>Energi Air (PLTA)</h3>
+                            <p class="text-xs text-slate-600">Mengubah energi potensial air bendungan menjadi energi kinetik memutar turbin pembuat listrik.</p>
+                        </div>
+                        <div class="p-5 bg-cyan-50 border border-cyan-200 rounded-2xl space-y-2">
+                            <h3 class="font-bold text-sm text-cyan-800"><i class="fa-solid fa-wind mr-2"></i>Energi Angin</h3>
+                            <p class="text-xs text-slate-600">Menggerakkan kincir turbin angin berdaya dorong aerodinamis.</p>
+                        </div>
+                        <div class="p-5 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+                            <h3 class="font-bold text-sm text-emerald-800"><i class="fa-solid fa-leaf mr-2"></i>Bioenergi & Biogas</h3>
+                            <p class="text-xs text-slate-600">Memanfaatkan limbah ternak / sisa masakan Kuliner menjadi gas metana fermentasi kompor pengganti LPG!</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+            } else {
+                container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full uppercase">Sub-Modul ${sub.toUpperCase()}</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-2">Energi Mekanik, Analisis Data & Buktikan dengan Data!</h2>
+                    </div>
+
+                    <div class="p-6 bg-slate-900 text-white rounded-2xl space-y-4">
+                        <h3 class="font-bold text-sm text-amber-400">Aktivitas Penalaran Ilmiah: Buktikan dengan Data!</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Pernyataan: <em>"Pemasangan panel surya pada atap gedung SMKN 1 Kalipucang berorientasi ke selatan dapat menghemat konsumsi energi listrik PLN hingga 30% per bulan."</em>
+                        </p>
+                        <div class="bg-slate-800 p-4 rounded-xl text-xs space-y-2 border border-slate-700">
+                            <strong class="text-emerald-400 block">Argumen Ilmiah Siswa:</strong>
+                            <p>Berdasarkan posisi geografis Kalipucang yang berada dekat garis khatulistiwa, intensitas pancaran foton surya harian mencapai 4.8 kWh/m²/hari. Kemiringan atap 15° ke selatan mengoptimalkan radiasi harian, sehingga mengonversi energi cahaya menjadi energi listrik puncak harian.</p>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+        }
+
+        function calculateWork() {
+            const f = parseFloat(document.getElementById('calcF').value) || 0;
+            const s = parseFloat(document.getElementById('calcS').value) || 0;
+            const res = f * s;
+            const el = document.getElementById('calcResult');
+            el.classList.remove('hidden');
+            el.innerHTML = `Hasil Usaha (W) = ${f} N × ${s} m = <strong>${res} Joule (J)</strong>`;
+        }
+
+        function initFossilChart() {
+            const ctx = document.getElementById('fossilChart');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Minyak Bumi', 'Batubara', 'Gas Alam', 'Surya/PLTA'],
+                    datasets: [{
+                        label: 'Emisi CO₂ (Gram/kWh)',
+                        data: [820, 1000, 490, 40],
+                        backgroundColor: ['#f59e0b', '#dc2626', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function renderDPIBView(container) {
+            markSectionAsRead('dpib');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-amber-700 to-slate-900 text-white rounded-3xl p-8 md:p-10 shadow-xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 bg-amber-500/20 px-3 py-1 rounded-full text-xs text-amber-300 border border-amber-500/30 font-bold">
+                        <i class="fa-solid fa-compass-drafting"></i>
+                        <span>MODUL C: LINTAS KEANLUSAN DPIB</span>
+                    </div>
+                    <h2 class="text-3xl font-extrabold">IPAS Dalam Desain Pemodelan & Informasi Bangunan</h2>
+                    <p class="text-xs md:text-sm text-slate-300 max-w-3xl leading-relaxed">
+                        Seorang Arsitek dan Drafter DPIB profesional tidak hanya menggambar garis, tetapi wajib memahami reaksi sains bahan semen, pengerasan beton, korosi struktur baja, serta perhitungan efisiensi energi bangunan!
+                    </p>
+                </div>
+
+                <!-- Case Studies & Deep Dives -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-2xl p-6 space-y-4 border-l-4 border-l-amber-500">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-cubes text-amber-600"></i>
+                            <span>1. Reaksi Kimia Pengerasan Semen & Beton</span>
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Ketika pencampuran semen, pasir, kerikil, dan air dilakukan, terjadi proses <strong>Hidrasi Semen</strong> (reaksi eksotermik melepaskan panas). Senyawa Kalsium Silikat Hidrat (C-S-H) terbentuk dan mengikat agregat kasar menjadi batuan beton buatan yang sangat keras.
+                        </p>
+                        <div class="bg-amber-50 p-3 rounded-xl text-xs text-amber-900 font-medium">
+                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> Fenomena: Penguapan air yang terlalu cepat pada beton basah menyebabkan retak struktur (shrinkage crack).
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 space-y-4 border-l-4 border-l-rose-500">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-shield-cat text-rose-600"></i>
+                            <span>2. Pencegahan Korosi Baja Konstruksi</span>
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Besi/Baja (Fe) pada rangka atap mengalami reaksi oksidasi akibat kontak dengan gas Oksigen (O₂) dan kelembapan air (H₂O) menghasilkan karat besi (Fe₂O₃·nH₂O).
+                        </p>
+                        <div class="bg-rose-50 p-3 rounded-xl text-xs text-rose-900 font-medium">
+                            Solusi DPIB: Lapisan galvalum (seng-aluminium) atau cat dasar anti-karat (zinc chromate).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DPIB Interactive Quiz -->
+                <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-4">
+                    <h3 class="font-bold text-sm text-amber-400"><i class="fa-solid fa-clipboard-question mr-2"></i>Kuis Pemahaman Rekayasa DPIB</h3>
+                    <p class="text-xs text-slate-300">
+                        Mengapa penggunaan kaca Low-Emissivity (Low-E) pada bangunan tinggi disarankan untuk menghemat energi pendingin AC?
+                    </p>
+                    <button onclick="alert('Penjelasan: Kaca Low-E memantulkan radiasi panas sinar inframerah matahari tetapi tetap meneruskan cahaya tampak, sehingga ruangan tetap terang tanpa menjadi panas berlebih (menghemat listrik AC)!')" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-lg transition">
+                        Buka Jawaban Analisis
+                    </button>
+                </div>
+            </div>
+            `;
+        }
+
+        function renderKulinerView(container) {
+            markSectionAsRead('kuliner');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-emerald-800 to-slate-900 text-white rounded-3xl p-8 md:p-10 shadow-xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 bg-emerald-500/20 px-3 py-1 rounded-full text-xs text-emerald-300 border border-emerald-500/30 font-bold">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>MODUL D: LINTAS KEANLUSAN KULINER</span>
+                    </div>
+                    <h2 class="text-3xl font-extrabold">IPAS Dalam Seni Kuliner & Tata Boga</h2>
+                    <p class="text-xs md:text-sm text-slate-300 max-w-3xl leading-relaxed">
+                        Memasak adalah sains terapan nyata! Seorang Chef profesional mengontrol perubahan fisika, reaksi kimia karamelisasi, serta konversi energi panas secara presisi demi cita rasa lezat!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-2xl p-6 space-y-4 border-l-4 border-l-emerald-500">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-cookie-bite text-emerald-600"></i>
+                            <span>1. Reaksi Maillard & Karamelisasi</span>
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Saat memanggang daging atau memanggang roti, reaksi antara asam amino (protein) dan gula pereduksi pada suhu >140°C menghasilkan aroma harum khas dan warna cokelat menggugah selera!
+                        </p>
+                        <div class="bg-emerald-50 p-3 rounded-xl text-xs text-emerald-900 font-medium">
+                            Status Sains: Perubahan Kimia permanen menghasilkan senyawa aroma baru.
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6 space-y-4 border-l-4 border-l-teal-500">
+                        <h3 class="font-bold text-base text-slate-800 flex items-center space-x-2">
+                            <i class="fa-solid fa-bread-slice text-teal-600"></i>
+                            <span>2. Fermentasi Adonan Roti</span>
+                        </h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Ragi (Saccharomyces cerevisiae) mengonsumsi gula pada adonan tepung dan menghasilkan gas Karbon Dioksida (CO₂) serta alkohol. Gas CO₂ terperangkap dalam jaring gluten sehingga adonan mengembang elastis.
+                        </p>
+                        <div class="bg-teal-50 p-3 rounded-xl text-xs text-teal-900 font-medium">
+                            Status Sains: Perubahan Biologi & Biokimia.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kuliner Interactive Quiz -->
+                <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-4">
+                    <h3 class="font-bold text-sm text-emerald-400"><i class="fa-solid fa-clipboard-question mr-2"></i>Kuis Pemahaman Rekayasa Kuliner</h3>
+                    <p class="text-xs text-slate-300">
+                        Mengapa membekukan daging secara cepat (flash freezing) pada suhu -18°C lebih bagus menjaga tekstur juice daging dibanding pembekuan lambat?
+                    </p>
+                    <button onclick="alert('Penjelasan: Pembekuan cepat menghasilkan kristal es mikroskopis kecil sehingga tidak merusak selaput sel dinding daging. Sebaliknya pembekuan lambat membuat kristal es besar yang merobek dinding sel sehingga juice daging terbuang saat ditawartautkan (thawing)!')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs rounded-lg transition">
+                        Buka Jawaban Analisis
+                    </button>
+                </div>
+            </div>
+            `;
+        }
+    </script>
+
+    <script>
+        function renderKuisMenu(container) {
+            markSectionAsRead('kuis');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">Latihan Formatif Interaktif</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Kuis & Game Pembelajaran IPAS</h2>
+                    <p class="text-sm text-slate-600">Uji kemampuan diri kamu secara seru dengan umpan balik otomatis langsung!</p>
+                </div>
+
+                <div id="quizContainer" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div class="text-center space-y-4">
+                        <i class="fa-solid fa-gamepad text-5xl text-blue-500"></i>
+                        <h3 class="text-lg font-bold text-slate-800">Pilih Tema Kuis Cepat</h3>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button onclick="startMiniQuiz('zat')" class="bg-cyan-600 text-white font-bold text-xs px-5 py-3 rounded-xl hover:bg-cyan-700 transition">Kuis Modul Zat</button>
+                            <button onclick="startMiniQuiz('energi')" class="bg-amber-600 text-white font-bold text-xs px-5 py-3 rounded-xl hover:bg-amber-700 transition">Kuis Modul Energi</button>
+                            <button onclick="startMiniQuiz('dpib')" class="bg-dpib-600 text-white font-bold text-xs px-5 py-3 rounded-xl hover:bg-dpib-700 transition">Kuis Sains DPIB</button>
+                            <button onclick="startMiniQuiz('kuliner')" class="bg-kuliner-600 text-white font-bold text-xs px-5 py-3 rounded-xl hover:bg-kuliner-700 transition">Kuis Sains Kuliner</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function startMiniQuiz(type) {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = `
+            <div class="space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h4 class="font-bold text-sm text-slate-800">Kuis Interaktif: ${type.toUpperCase()}</h4>
+                    <button onclick="renderKuisMenu(document.getElementById('appContainer'))" class="text-xs text-slate-500 font-bold">Kembali</button>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-xs font-semibold text-slate-700">Soal 1: Manakah dari fenomena berikut yang menunjukkan perubahan kimia?</p>
+                    <div class="space-y-2">
+                        <button onclick="answerMiniQuiz(false, 'Es meleleh adalah perubahan fisika.')" class="w-full text-left p-3 rounded-xl bg-slate-50 border text-xs font-medium hover:bg-slate-100">A. Es batu meleleh dalam gelas sirup</button>
+                        <button onclick="answerMiniQuiz(true, 'Kayu terbakar menghasilkan abu dan gas CO2 (zat baru).')" class="w-full text-left p-3 rounded-xl bg-slate-50 border text-xs font-medium hover:bg-slate-100">B. Kayu terbakar menjadi abu</button>
+                        <button onclick="answerMiniQuiz(false, 'Tepung terigu diayak hanya perubahan ukuran.')" class="w-full text-left p-3 rounded-xl bg-slate-50 border text-xs font-medium hover:bg-slate-100">C. Mengayak tepung terigu</button>
+                    </div>
+                </div>
+
+                <div id="miniQuizFeedback" class="hidden text-xs p-3 rounded-xl font-bold"></div>
+            </div>
+            `;
+        }
+
+        function answerMiniQuiz(isCorrect, explanation) {
+            const fb = document.getElementById('miniQuizFeedback');
+            fb.classList.remove('hidden');
+            if (isCorrect) {
+                fb.className = 'text-xs p-3 rounded-xl font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+                fb.innerHTML = `Benar! Jawabanmu tepat. ${explanation}`;
+            } else {
+                fb.className = 'text-xs p-3 rounded-xl font-bold bg-rose-100 text-rose-800 border border-rose-300';
+                fb.innerHTML = `Belum tepat. Coba perhatikan kembali! ${explanation}`;
+            }
+        }
+    </script>
+
+    <script>
+        const evalQuestions = [
+            { q: "Segala sesuatu yang memiliki massa dan menempati ruang disebut...", opts: ["Energi", "Materi/Zat", "Gaya", "Gelombang"], ans: 1 },
+            { q: "Perubahan wujud zat dari cair menjadi gas dengan menerima kalor disebut...", opts: ["Membeku", "Menguap", "Mengembun", "Menyublim"], ans: 1 },
+            { q: "Zat tunggal yang tidak dapat diuraikan lagi menjadi zat lain yang lebih sederhana secara kimia disebut...", opts: ["Senyawa", "Unsur", "Campuran Homogen", "Larutan"], ans: 1 },
+            { q: "Air garam (larutan garam) termasuk dalam kelompok...", opts: ["Unsur", "Senyawa", "Campuran Homogen", "Campuran Heterogen"], ans: 2 },
+            { q: "Campuran semen, pasir, kerikil, dan air dalam adonan beton bangunan termasuk...", opts: ["Campuran Homogen", "Campuran Heterogen", "Unsur Logam", "Senyawa Tunggal"], ans: 1 },
+            { q: "Pemisahan ampas kopi dari cairannya menggunakan penyaring kertas disebut...", opts: ["Filtrasi", "Distilasi", "Evaporasi", "Kristalisasi"], ans: 0 },
+            { q: "Sifat zat yang berhubungan dengan terbentuknya zat baru seperti mudah berkarat disebut...", opts: ["Sifat Fisika", "Sifat Kimia", "Sifat Biologi", "Sifat Mekanik"], ans: 1 },
+            { q: "Alat ukur yang memiliki ketelitian hingga 0.01 mm untuk mengukur tebal plat baja DPIB adalah...", opts: ["Mistar", "Jangka Sorong", "Mikrometer Sekrup", "Meteran Rool"], ans: 2 },
+            { q: "Besi berkarat merupakan contoh dari perubahan...", opts: ["Fisika", "Kimia", "Wujud", "Geometris"], ans: 1 },
+            { q: "Simbol B3 berupa gambar tengkorak menandakan bahwa bahan tersebut bersifat...", opts: ["Mudah Terbakar", "Korosif", "Beracun (Toxic)", "Radioaktif"], ans: 2 },
+            { q: "Hukum Kekekalan Energi menyatakan bahwa energi tidak dapat...", opts: ["Berubah bentuk", "Diciptakan atau dimusnahkan", "Dimanfaatkan manusia", "Diukur"], ans: 1 },
+            { q: "Transformasi energi yang terjadi saat menyalakan kompor gas LPG adalah...", opts: ["Listrik -> Panas", "Kimia -> Kalor & Cahaya", "Mekanik -> Listrik", "Cahaya -> Kimia"], ans: 1 },
+            { q: "Rumus matematis untuk menghitung Usaha (W) dalam fisika adalah...", opts: ["W = m × g", "W = F × s", "W = P × t", "W = V × I"], ans: 1 },
+            { q: "Contoh sumber energi terbarukan ramah lingkungan adalah...", opts: ["Batubara", "Minyak Bumi", "Energi Surya (Matahari)", "Gas Alam Fosil"], ans: 2 },
+            { q: "Energi yang dimiliki oleh benda karena kedudukannya atau ketinggiannya disebut...", opts: ["Energi Kinetik", "Energi Potensial", "Energi Bunyi", "Energi Listrik"], ans: 1 },
+            { q: "Perubahan adonan roti mengembang akibat ragi Saccharomyces tergolong perubahan...", opts: ["Fisika", "Kimia & Biologi", "Mekanik", "Termal murni"], ans: 1 },
+            { q: "Pemasangan kosen aluminium pada bangunan DPIB memanfaatkan sifat keunggulan aluminium yaitu...", opts: ["Mudah berkarat", "Tahan korosi & ringan", "Sangat berat", "Mudah terbakar"], ans: 1 },
+            { q: "Proses pencokelatan makanan akibat reaksi antara protein dan gula reduksi dinamakan...", opts: ["Reaksi Maillard", "Oksidasi Besi", "Filtrasi", "Deposisi"], ans: 0 },
+            { q: "Gas metana yang dihasilkan dari fermentasi limbah bahan kotoran/makanan dinamakan...", opts: ["Biogas", "Bensin", "LPG Fosil", "Oksigen"], ans: 0 },
+            { q: "Satuan standar internasional (SI) untuk mengukur Usaha dan Energi adalah...", opts: ["Watt", "Newton", "Joule", "Pascal"], ans: 2 }
+        ];
+
+        function renderEvaluasiView(container) {
+            markSectionAsRead('evaluasi');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-bold text-purple-600 bg-purple-50 px-3 py-1 rounded-full uppercase tracking-wider">Tes Sumatif Akhir Modul</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Evaluasi Pembelajaran Projek IPAS</h2>
+                    <p class="text-sm text-slate-600">Jawab 20 soal pilihan ganda di bawah ini untuk menguji pencapaian kompetensi kamu.</p>
+                </div>
+
+                <form id="evalForm" onsubmit="submitEvaluasi(event)" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-8">
+                    <div id="evalQuestionsList" class="space-y-6">
+                        <!-- Injected by JS -->
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-brand-600 text-white font-extrabold text-sm py-4 rounded-xl shadow-lg hover:opacity-95 transition">
+                        Kirim Jawaban & Lihat Hasil Evaluasi
+                    </button>
+                </form>
+
+                <div id="evalResultBox" class="hidden bg-slate-900 text-white p-8 rounded-3xl space-y-6">
+                    <!-- Dynamic score injected here -->
+                </div>
+            </div>
+            `;
+
+            const list = document.getElementById('evalQuestionsList');
+            evalQuestions.forEach((item, idx) => {
+                const qEl = document.createElement('div');
+                qEl.className = 'p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3';
+                qEl.innerHTML = `
+                <div class="font-bold text-sm text-slate-800">
+                    <span class="text-purple-600">${idx + 1}.</span> ${item.q}
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    ${item.opts.map((opt, oIdx) => `
+                        <label class="flex items-center space-x-2 bg-white p-2.5 rounded-lg border cursor-pointer hover:bg-purple-50">
+                            <input type="radio" name="q${idx}" value="${oIdx}" required class="accent-purple-600">
+                            <span>${opt}</span>
+                        </label>
+                    `).join('')}
+                </div>
+                `;
+                list.appendChild(qEl);
+            });
+        }
+
+        function submitEvaluasi(e) {
+            e.preventDefault();
+            let score = 0;
+            evalQuestions.forEach((item, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                if (selected && parseInt(selected.value) === item.ans) {
+                    score += 5; // 20 questions * 5 = 100 max
+                }
+            });
+
+            state.progress.evaluationScore = score;
+            saveProgress();
+
+            const box = document.getElementById('evalResultBox');
+            box.classList.remove('hidden');
+            document.getElementById('evalForm').classList.add('hidden');
+
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+            box.innerHTML = `
+            <div class="text-center space-y-4">
+                <div class="w-20 h-20 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto text-purple-400 text-4xl border border-purple-500/30">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Hasil Evaluasi Sumatif Kamu</h3>
+                <div class="text-5xl font-black text-amber-400 font-mono">${score} / 100</div>
+                <p class="text-xs text-slate-300">
+                    ${score >= 75 ? 'Luar biasa! Kamu telah menguasai konsep Projek IPAS dengan Sangat Baik!' : 'Bagus! Pelajari kembali beberapa materi yang masih membingungkan dan coba lagi!'}
+                </p>
+                <button onclick="navigateTo('selesai')" class="bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs px-6 py-3 rounded-xl transition">
+                    Lihat Halaman Ringkasan Akhir & Sertifikat
+                </button>
+            </div>
+            `;
+        }
+    </script>
+
+    <script>
+        const tantanganList = [
+            "Temukan 5 contoh zat padat, cair, dan gas di area laboratorium/bengkel sekolah.",
+            "Identifikasi 3 contoh campuran homogen dan heterogen di sekitar lingkungan SMKN 1 Kalipucang.",
+            "Amati kegiatan memasak di kantin/dapur Kuliner dan catat perubahan materi yang terjadi.",
+            "Catat perubahan bentuk energi pada minimal 5 peralatan listrik di lingkungan sekolah.",
+            "Identifikasi penerapan efisiensi energi atau pemilihan material pada gedung bangunan sekolah.",
+            "Pilih 1 fenomena IPAS menarik di sekitar rumahmu dan jelaskan alasan ilmiahnya."
+        ];
+
+        function renderTantanganView(container) {
+            markSectionAsRead('tantangan');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">Aktivitas Nyata Lapangan</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Tantangan IPAS Mandiri</h2>
+                    <p class="text-sm text-slate-600">Centang setiap tantangan yang telah selesai kamu lakukan di kehidupan nyata!</p>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    ${tantanganList.map((t, idx) => {
+                        const isDone = state.progress.challenges.includes(idx);
+                        return `
+                        <div onclick="toggleChallenge(${idx})" class="p-4 rounded-xl border ${isDone ? 'bg-emerald-50 border-emerald-300' : 'bg-slate-50 border-slate-200'} flex items-start space-x-3 cursor-pointer hover:border-emerald-400 transition">
+                            <input type="checkbox" ${isDone ? 'checked' : ''} class="mt-1 accent-emerald-600 rounded">
+                            <div class="text-xs font-medium text-slate-800">
+                                <span class="font-bold text-emerald-700">Tantangan ${idx + 1}:</span> ${t}
+                            </div>
+                        </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+            `;
+        }
+
+        function toggleChallenge(idx) {
+            const arr = state.progress.challenges;
+            if (arr.includes(idx)) {
+                state.progress.challenges = arr.filter(i => i !== idx);
+            } else {
+                arr.push(idx);
+            }
+            saveProgress();
+            renderTantanganView(document.getElementById('appContainer'));
+        }
+
+        function renderRefleksiView(container) {
+            markSectionAsRead('refleksi');
+            container.innerHTML = `
+            <div class="fade-in space-y-8">
+                <div class="text-center max-w-2xl mx-auto space-y-2">
+                    <span class="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-full uppercase tracking-wider">Self-Assessment</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Jurnal Refleksi Pembelajaran</h2>
+                    <p class="text-sm text-slate-600">Renungkan proses belajar kamu untuk membangun profil pelajar yang mandiri dan bernalar kritis.</p>
+                </div>
+
+                <form onsubmit="saveReflectionForm(event)" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-800 block mb-1">1. Konsep atau materi apa yang paling saya pahami dengan baik?</label>
+                        <textarea id="ref1" rows="2" required class="w-full p-3 bg-slate-50 border rounded-xl text-xs">${state.progress.reflections.r1 || ''}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-800 block mb-1">2. Konsep apa yang masih terasa membingungkan bagi saya?</label>
+                        <textarea id="ref2" rows="2" required class="w-full p-3 bg-slate-50 border rounded-xl text-xs">${state.progress.reflections.r2 || ''}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-800 block mb-1">3. Fenomena sehari-hari/dunia kerja apa yang sekarang dapat saya jelaskan secara ilmiah?</label>
+                        <textarea id="ref3" rows="2" required class="w-full p-3 bg-slate-50 border rounded-xl text-xs">${state.progress.reflections.r3 || ''}</textarea>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-800 block mb-1">4. Tingkat pemahaman mandiri saya terhadap modul ini:</label>
+                        <select id="refLevel" class="w-full p-3 bg-slate-50 border rounded-xl text-xs font-bold text-brand-600">
+                            <option value="Sangat Paham">⭐ Sangat Paham</option>
+                            <option value="Paham">🙂 Paham</option>
+                            <option value="Cukup Paham">😐 Cukup Paham</option>
+                            <option value="Masih Perlu Belajar">😕 Masih Perlu Belajar</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs py-3 rounded-xl transition">
+                        Simpan Jurnal Refleksi
+                    </button>
+                    <div id="refSavedAlert" class="hidden text-xs font-bold text-emerald-600 text-center">Jurnal refleksi berhasil disimpan!</div>
+                </form>
+            </div>
+            `;
+        }
+
+        function saveReflectionForm(e) {
+            e.preventDefault();
+            state.progress.reflections = {
+                r1: document.getElementById('ref1').value,
+                r2: document.getElementById('ref2').value,
+                r3: document.getElementById('ref3').value,
+                level: document.getElementById('refLevel').value
+            };
+            saveProgress();
+            document.getElementById('refSavedAlert').classList.remove('hidden');
+        }
+    </script>
+
+    <script>
+        function renderSelesaiView(container) {
+            container.innerHTML = `
+            <div class="fade-in max-w-3xl mx-auto space-y-8 text-center">
+                <div class="bg-gradient-to-br from-slate-900 via-brand-900 to-slate-900 text-white p-8 md:p-12 rounded-3xl shadow-2xl space-y-6 border border-brand-500/30">
+                    <div class="w-20 h-20 bg-amber-400 text-slate-950 rounded-full flex items-center justify-center text-4xl mx-auto shadow-lg">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+
+                    <h2 class="text-2xl md:text-4xl font-black">Selamat! Kamu Telah Menyelesaikan Media Pembelajaran Projek IPAS</h2>
+                    <p class="text-xs md:text-sm text-slate-300">
+                        Zat dan Perubahannya serta Energi dan Perubahannya
+                    </p>
+
+                    <!-- Summary Stats Card -->
+                    <div class="grid grid-cols-3 gap-4 bg-white/10 p-4 rounded-2xl border border-white/10 text-xs">
+                        <div>
+                            <span class="text-slate-400 block">Nilai Evaluasi</span>
+                            <span class="text-amber-400 font-bold text-xl">${state.progress.evaluationScore ?? 0}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Tantangan Selesai</span>
+                            <span class="text-emerald-400 font-bold text-xl">${state.progress.challenges.length} / 6</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Progress Modul</span>
+                            <span class="text-cyan-400 font-bold text-xl">${Math.min(100, Math.round((state.progress.readSections.length / 35) * 100))}%</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-white/10 text-xs text-slate-300 space-y-1">
+                        <p class="font-bold text-white text-sm">SMKN 1 KALIPUCANG</p>
+                        <p>Mata Pelajaran: Projek IPAS (Fase E / Kelas X)</p>
+                        <p>Dibuat oleh: <strong class="text-amber-300">Evi Fitriani, S.Pd.</strong></p>
+                    </div>
+
+                    <div class="pt-4 flex justify-center space-x-4">
+                        <button onclick="navigateTo('home')" class="bg-white text-slate-900 font-bold text-xs px-6 py-3 rounded-xl hover:bg-slate-100 transition">
+                            <i class="fa-solid fa-house mr-1"></i> Kembali ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderView();
+        });
+    </script>
+</body>
+</html>
